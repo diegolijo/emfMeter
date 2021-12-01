@@ -1,0 +1,13 @@
+.digitalMeter {
+  font-size: larger;
+  color: var(--ion-color-dark);
+  text-align: center;
+  margin-bottom: 3em;
+}
+
+.meter-dimensions {
+  font-size: small;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 1em 15vw
+}

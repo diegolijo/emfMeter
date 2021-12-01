@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title style="text-align:center">
+      EMF meter
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment (ionChange)="onChangeScale($event)" value="100">
+      <ion-segment-button value="100">
+        <ion-label style="text-transform:none;">100µT</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="400">
+        <ion-label style="text-transform:none;">400µT</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1000">
+        <ion-label style="text-transform:none;">1000µT</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+
+<div>
+  <img style="z-index: 10000; position: absolute; top: 112px; left: 0px" src="assets/img/agujaGris.png" [ngStyle]="{
+      'transform':'rotate(' + this.deg + 'deg)',
+      'width.px': this.width * this.factor,
+      'height.px': this.height * this.factor}">
+
+
+  <div class="digitalMeter">{{this.magnitude}}µT
+    <div class="meter-dimensions">
+      <div>x: {{this.x}} </div><div>y: {{this.y}}</div><div>z: {{this.z}}</div>
+    </div>
+  </div>
+
+  <img style="z-index: 1000;position: absolute; top: 112px; left: 0px" [src]="this.scaleMeter" [ngStyle]="{
+  'width.px': this.width * this.factor,
+  'height.px': this.height * this.factor}">
+</div>

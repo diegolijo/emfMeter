@@ -1,0 +1,7 @@
+{
+  "name": "medidorEm",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
