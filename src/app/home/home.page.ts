@@ -1,48 +1,66 @@
-import { Component, OnInit } from '@angular/core';
+/* eslint-disable @typescript-eslint/naming-convention */
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AppMinimize } from '@ionic-native/app-minimize/ngx/';
 import { Magnetometer, MagnetometerReading } from '@ionic-native/magnetometer/ngx';
-import { Platform } from '@ionic/angular';
+import { IonSegment, Platform } from '@ionic/angular';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  private static maxDeg = 71;
-  public width = 350;
-  public height = 650;
-  public factor = 0;
-  public deg = 0;
+
+  private static maxDeg = 71.5;
+
+  @ViewChild('segment', { static: true }) segment: IonSegment;
+  public isAutorange = false;
+
+  public readonly MAX = 1000;
+  public readonly MID = 400;
+  public readonly MIN = 100;
+
+  public WIDTH = 350;
+  public HEIGHT = 650;
+  public factor: number;
+  public deg: number;
   public magnitude = '0';
   public x = '0';
   public y = '0';
   public z = '0';
   public scaleMeter = 'assets/img/100uT.png';
-  private scale = 0;
+
+  // public segmentValue = this.MIN;
+  private scale = (HomePage.maxDeg) / 100;
   private subscription: any;
+  private RANGE_TRHESHOLD = 2000;
+  private timeOut: any;
+  private timeOut2: any;
+
 
   constructor(
     private magnetometer: Magnetometer,
     private platform: Platform,
-    private appMinimize: AppMinimize
+    private appMinimize: AppMinimize,
   ) {
-    this.factor = innerWidth / this.width;
+    this.factor = innerWidth / this.WIDTH;
+    this.deg = (this.scale * 25);
   }
 
 
-  ngOnInit(): void {
-    this.scale = (HomePage.maxDeg) / 100;
-    this.deg = (this.scale * 75);
+  async ngOnInit() {
+    this.segment.value = this.MIN.toString();
     this.platform.ready().then(() => {
       this.initMagnetometer();
     });
     this.platform.backButton.subscribeWithPriority(10000, () => {
       this.appMinimize.minimize();
     });
+
   }
 
   public onChangeScale(value: any) {
     this.scale = (HomePage.maxDeg) / Number.parseInt(value.detail.value, 10);
+    this.segment.value = value.detail.value;
     switch (value.detail.value) {
       case '100':
         this.scaleMeter = 'assets/img/100uT.png';
@@ -59,19 +77,33 @@ export class HomePage implements OnInit {
   }
 
   private initMagnetometer() {
-    this.subscription = this.magnetometer.watchReadings().subscribe((data: MagnetometerReading) => {
-      // console.log(data.magnitude);{x: -15.119999885559082, y: 16.85999870300293, z: 4.980000019073486, magnitude: 23.187805996338422}
-      this.updateData(data);
-    });
+    if (this.platform.is('cordova')) {
+      this.subscription = this.magnetometer.watchReadings().subscribe((data: MagnetometerReading) => {
+        // console.log(data.magnitude);{x: -15.119999885559082, y: 16.85999870300293, z: 4.980000019073486, magnitude: 23.187805996338422}
+        this.updateData(data.magnitude, data.x, data.y, data.z);
+      });
+    }
+
+    if (!this.platform.is('cordova')) {
+      setInterval(() => {
+        this.updateData(Math.random() * 500, Math.random() * 1000, Math.random() * 1000, Math.random() * 1000);
+      }, 1000);
+    }
   }
 
-  private updateData(data: MagnetometerReading) {
+  private updateData(magnitude, x, y, z) {
     try {
-      this.magnitude = data.magnitude.toFixed(1);
-      this.x = data.x.toFixed(1);
-      this.y = data.y.toFixed(1);
-      this.z = data.z.toFixed(1);
-      this.deg = (this.scale * data.magnitude);
+      // auntorange
+      if (this.isAutorange) {
+        this.setRangeUp(magnitude);
+        this.restoreRange(magnitude);
+      }
+      // set view values
+      this.magnitude = magnitude.toFixed(1);
+      this.x = x.toFixed(1);
+      this.y = y.toFixed(1);
+      this.z = z.toFixed(1);
+      this.deg = (this.scale * magnitude);
       this.deg = this.deg > HomePage.maxDeg + 2 ? HomePage.maxDeg + 2 : this.deg;
     } catch (err) {
       console.log(err);
@@ -81,5 +113,29 @@ export class HomePage implements OnInit {
   }
 
 
+  private setRangeUp(magnitude: any) {
+    if (magnitude > this.MIN && Number.parseInt(this.segment.value, 10) === this.MIN) {
+      this.segment.value = this.MID.toString();
+    }
+    if (magnitude > this.MID && Number.parseInt(this.segment.value, 10) >= this.MID) {
+      this.segment.value = this.MAX.toString();
+    }
+  }
 
+  private restoreRange(magnitude: any) {
+    if (magnitude > this.MID) {
+      clearTimeout(this.timeOut2);
+      this.timeOut2 = setTimeout(() => {
+        this.segment.value = this.MID.toString();
+      }, this.RANGE_TRHESHOLD);
+    }
+    if (magnitude > this.MIN) {
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.segment.value = this.MIN.toString();
+      }, this.RANGE_TRHESHOLD);
+    }
+  }
 }
+
+
