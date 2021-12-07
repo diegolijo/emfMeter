@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { Platform } from '@ionic/angular';
-import { Subject } from 'rxjs/internal/Subject';
+import { IonMenu, Platform } from '@ionic/angular';
+import { ProStorage } from './services/storage-provider';
 
 @Component({
   selector: 'app-root',
@@ -10,29 +10,50 @@ import { Subject } from 'rxjs/internal/Subject';
 })
 export class AppComponent implements OnInit {
 
-  checkAutorange: boolean;
+  @ViewChild('menu', { static: true }) menu: IonMenu;
 
-  constructor(private platform: Platform,
-    private splashScreen: SplashScreen) {
+  public version = '0.0.2';
+  public checkAutorange: boolean;
+  private menuSubscrive: any;
+
+  constructor(
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private storage: ProStorage
+  ) {
 
   }
-  ngOnInit(): void {
+
+  ngOnInit() {
     document.body.setAttribute('color-theme', 'dark');
-    this.checkAutorange = true; // set get userData
-    this.platform.ready().then(() => {
+
+    this.platform.ready().then(async () => {
+      await this.storage.init();
+      // recuperamos datos guardados
+      await this.getData();
       setTimeout(() => {
         this.splashScreen.hide();
       }, 1000);
     });
   }
 
-  public onOpenMenu(event) {
+  public onOpenMenu() {
+    this.menuSubscrive = this.platform.backButton.subscribeWithPriority(100000, () => {
+      this.menu.close();
+    });
 
   }
-  public onCloseMenu(event) {
-
+  public onCloseMenu() {
+    this.menuSubscrive.unsubscribe();
   }
 
   public onChangeCkeks(event) {
+    this.storage.setItem(ProStorage.AUTORANGE, event.detail.checked);
   }
+
+  private async getData() {
+    this.checkAutorange = await this.storage.getItem(ProStorage.AUTORANGE);
+  }
+
+
 }

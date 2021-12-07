@@ -1,15 +1,11 @@
 <ion-header>
   <ion-toolbar>
-
-
-
-
     <ion-title style="text-align:center">
       EMF meter
     </ion-title>
 
     <ion-buttons style="position: absolute; left: 0px; top: 0px; ">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button ></ion-menu-button>
     </ion-buttons>
 
   </ion-toolbar>
@@ -39,10 +35,13 @@
   'height.px': this.HEIGHT * this.factor}">
 </div>
 
+
 <div class="digitalMeter">{{this.magnitude}}µT
   <div class="meter-dimensions">
     <div>x: {{this.x}} </div>
     <div>y: {{this.y}}</div>
     <div>z: {{this.z}}</div>
   </div>
-</div>
+
+</div>  
+

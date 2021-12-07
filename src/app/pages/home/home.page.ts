@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AppMinimize } from '@ionic-native/app-minimize/ngx/';
 import { Magnetometer, MagnetometerReading } from '@ionic-native/magnetometer/ngx';
 import { IonSegment, Platform } from '@ionic/angular';
+import { ProStorage } from '../../services/storage-provider';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -13,7 +14,7 @@ export class HomePage implements OnInit {
   private static maxDeg = 71.5;
 
   @ViewChild('segment', { static: true }) segment: IonSegment;
-  public isAutorange = false;
+  public isAutorange: boolean;
 
   public readonly MAX = 1000;
   public readonly MID = 400;
@@ -41,6 +42,7 @@ export class HomePage implements OnInit {
     private magnetometer: Magnetometer,
     private platform: Platform,
     private appMinimize: AppMinimize,
+    private storage: ProStorage
   ) {
     this.factor = innerWidth / this.WIDTH;
     this.deg = (this.scale * 25);
@@ -48,17 +50,30 @@ export class HomePage implements OnInit {
 
 
   async ngOnInit() {
-    this.segment.value = this.MIN.toString();
-    this.platform.ready().then(() => {
+    this.platform.ready().then(async () => {
       this.initMagnetometer();
+      this.isAutorange = await this.storage.getItem(ProStorage.AUTORANGE);
+      this.segment.value = this.MIN.toString();
     });
     this.platform.backButton.subscribeWithPriority(10000, () => {
-      this.appMinimize.minimize();
+      this.backBtnHandler();
     });
+    // eventos al guardar configuración
+    this.storage.storageObservable.subscribe((value) => {
+      switch (value.key) {
+        case ProStorage.AUTORANGE:
+          this.isAutorange = value.value;
+          break;
 
+        default:
+          break;
+      }
+
+    });
   }
 
-  public onChangeScale(value: any) {
+
+  public async onChangeScale(value: any) {
     this.scale = (HomePage.maxDeg) / Number.parseInt(value.detail.value, 10);
     this.segment.value = value.detail.value;
     switch (value.detail.value) {
@@ -75,6 +90,7 @@ export class HomePage implements OnInit {
         break;
     }
   }
+
 
   private initMagnetometer() {
     if (this.platform.is('cordova')) {
@@ -113,6 +129,13 @@ export class HomePage implements OnInit {
   }
 
 
+
+  private backBtnHandler() {
+    this.appMinimize.minimize();
+  }
+
+
+  /************************ autorange *************************/
   private setRangeUp(magnitude: any) {
     if (magnitude > this.MIN && Number.parseInt(this.segment.value, 10) === this.MIN) {
       this.segment.value = this.MID.toString();
@@ -136,6 +159,8 @@ export class HomePage implements OnInit {
       }, this.RANGE_TRHESHOLD);
     }
   }
+  /*************************************************************/
+
 }
 
 

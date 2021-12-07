@@ -8,18 +8,23 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ComponentsModule } from './components/componentsModule';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { ProStorage } from './services/storage-provider';
 
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot(), AppRoutingModule],
   providers: [
     NativeAudio,
     Magnetometer,
     SplashScreen,
     AppMinimize,
+    ComponentsModule,
+    ProStorage,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

@@ -1,26 +1,29 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <!--The global side menu-->
-    <ion-menu contentId="main-content" type="overlay" (ionWillOpen)="onOpenMenu($event)" (ionDidClose)="onCloseMenu()">
+    <ion-menu #menu contentId="main-content" type="overlay" (ionWillOpen)="onOpenMenu()" (ionDidClose)="onCloseMenu()">
+      <ion-header>
+        <ion-toolbar>
+          <p style="text-align:center;">Configuración</p>
+        </ion-toolbar>
+      </ion-header>
 
-      <ion-item>
-        autorange
-        <ion-checkbox [checked]="checkAutorange" (ionChange)="onChangeCkeks($event)">
-        </ion-checkbox>
-      </ion-item>
+      <ion-content>
+        <ion-item>
+          autorange
+          <ion-checkbox slot="end" [checked]="checkAutorange" (ionChange)="onChangeCkeks($event)">
+          </ion-checkbox>
+        </ion-item>
+      </ion-content>
+
+
 
 
       <ion-footer>
-        <ion-toolbar class="textCenter">
-
-
+        <ion-toolbar>
+          <p style="text-align:center;">Versión: {{version}}</p>
         </ion-toolbar>
       </ion-footer>
     </ion-menu>
-
-    <!--<ion-button fill="outline"  (click)="sendInfo()" size="large">Enviar Info Jonathan</ion-button> -->
-    <!--All the App content-->
     <ion-router-outlet id="main-content"></ion-router-outlet>
-
   </ion-split-pane>
 </ion-app>
