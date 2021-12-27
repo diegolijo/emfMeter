@@ -35,6 +35,13 @@ export class AnalogMeterComponent implements OnInit {
   constructor() {
   }
 
+  async ngOnInit() {
+    this.scale = (AnalogMeterComponent.maxDeg) / this.maxValue;
+    this.factor = innerWidth / this.WIDTH;
+    this.HEIGHT = this.WIDTH * 1.85;
+    this.deg = (this.scale * 50);
+  }
+
   @Input()
   set dataIn(value: any) {
     try {
@@ -46,12 +53,6 @@ export class AnalogMeterComponent implements OnInit {
     }
   }
 
-  async ngOnInit() {
-    this.scale = (AnalogMeterComponent.maxDeg) / this.maxValue;
-    this.factor = innerWidth / this.WIDTH;
-    this.HEIGHT = this.WIDTH * 1.85;
-    this.deg = (this.scale * 50);
-  }
 
 
 

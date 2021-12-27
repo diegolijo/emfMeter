@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { IonMenu, Platform } from '@ionic/angular';
@@ -12,14 +13,16 @@ export class AppComponent implements OnInit {
 
   @ViewChild('menu', { static: true }) menu: IonMenu;
 
-  public version = '0.0.2';
+  public version = '0.0.3';
   public checkAutorange: boolean;
+  public rangeHoldTime: number;
   private menuSubscrive: any;
+  private RANGE_HOLD_TIME = 2000;
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private storage: ProStorage
+    public storage: ProStorage
   ) {
 
   }
@@ -47,12 +50,31 @@ export class AppComponent implements OnInit {
     this.menuSubscrive.unsubscribe();
   }
 
-  public onChangeCkeks(event) {
-    this.storage.setItem(ProStorage.AUTORANGE, event.detail.checked);
+  public onChangeCkeks(event, key) {
+    switch (key) {
+      case this.storage.AUTORANGE:
+        this.checkAutorange = event.detail.checked;
+        this.storage.setItem(key, event.detail.checked);
+        break;
+      case this.storage.RANGE_HOLD_TIME:
+        this.rangeHoldTime = event.detail.value;
+        this.storage.setItem(key, event.detail.value);
+        break;
+
+      default:
+        break;
+    }
+
+
   }
 
   private async getData() {
-    this.checkAutorange = await this.storage.getItem(ProStorage.AUTORANGE);
+    this.checkAutorange = await this.storage.getItem(this.storage.AUTORANGE);
+    this.rangeHoldTime = await this.storage.getItem(this.storage.RANGE_HOLD_TIME);
+    if (!this.rangeHoldTime) {
+      this.rangeHoldTime = this.RANGE_HOLD_TIME;
+      this.storage.setItem(this.storage.RANGE_HOLD_TIME, this.RANGE_HOLD_TIME);
+    }
   }
 
 

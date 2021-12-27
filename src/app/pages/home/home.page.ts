@@ -33,7 +33,7 @@ export class HomePage implements OnInit {
   // public segmentValue = this.MIN;
   private scale = (HomePage.maxDeg) / 100;
   private subscription: any;
-  private RANGE_TRHESHOLD = 2000;
+  private holdTime: number;
   private timeOut: any;
   private timeOut2: any;
 
@@ -52,7 +52,8 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     this.platform.ready().then(async () => {
       this.initMagnetometer();
-      this.isAutorange = await this.storage.getItem(ProStorage.AUTORANGE);
+      this.isAutorange = await this.storage.getItem(this.storage.AUTORANGE);
+      this.holdTime = await this.storage.getItem(this.storage.RANGE_HOLD_TIME);
       this.segment.value = this.MIN.toString();
     });
     this.platform.backButton.subscribeWithPriority(10000, () => {
@@ -61,8 +62,11 @@ export class HomePage implements OnInit {
     // eventos al guardar configuración
     this.storage.storageObservable.subscribe((value) => {
       switch (value.key) {
-        case ProStorage.AUTORANGE:
+        case this.storage.AUTORANGE:
           this.isAutorange = value.value;
+          break;
+        case this.storage.RANGE_HOLD_TIME:
+          this.holdTime = value.value;
           break;
 
         default:
@@ -96,8 +100,17 @@ export class HomePage implements OnInit {
     if (this.platform.is('cordova')) {
       this.subscription = this.magnetometer.watchReadings().subscribe((data: MagnetometerReading) => {
         // console.log(data.magnitude);{x: -15.119999885559082, y: 16.85999870300293, z: 4.980000019073486, magnitude: 23.187805996338422}
-        this.updateData(data.magnitude, data.x, data.y, data.z);
+        try {
+          this.updateData(data.magnitude, data.x, data.y, data.z);
+        } catch (err) {
+          console.log(err);
+          this.subscription.unsubscribe();
+          this.initMagnetometer();
+        }
       });
+
+
+
     }
 
     if (!this.platform.is('cordova')) {
@@ -108,24 +121,18 @@ export class HomePage implements OnInit {
   }
 
   private updateData(magnitude, x, y, z) {
-    try {
-      // auntorange
-      if (this.isAutorange) {
-        this.setRangeUp(magnitude);
-        this.restoreRange(magnitude);
-      }
-      // set view values
-      this.magnitude = magnitude.toFixed(1);
-      this.x = x.toFixed(1);
-      this.y = y.toFixed(1);
-      this.z = z.toFixed(1);
-      this.deg = (this.scale * magnitude);
-      this.deg = this.deg > HomePage.maxDeg + 2 ? HomePage.maxDeg + 2 : this.deg;
-    } catch (err) {
-      console.log(err);
-      this.subscription.unsubscribe();
-      this.initMagnetometer();
+    // auntorange
+    if (this.isAutorange) {
+      this.setRangeUp(magnitude);
+      this.restoreRange(magnitude);
     }
+    // set view values
+    this.magnitude = magnitude.toFixed(1);
+    this.x = x.toFixed(1);
+    this.y = y.toFixed(1);
+    this.z = z.toFixed(1);
+    this.deg = (this.scale * magnitude);
+    this.deg = this.deg > HomePage.maxDeg + 2 ? HomePage.maxDeg + 2 : this.deg;
   }
 
 
@@ -150,13 +157,13 @@ export class HomePage implements OnInit {
       clearTimeout(this.timeOut2);
       this.timeOut2 = setTimeout(() => {
         this.segment.value = this.MID.toString();
-      }, this.RANGE_TRHESHOLD);
+      }, this.holdTime);
     }
     if (magnitude > this.MIN) {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         this.segment.value = this.MIN.toString();
-      }, this.RANGE_TRHESHOLD);
+      }, this.holdTime);
     }
   }
   /*************************************************************/

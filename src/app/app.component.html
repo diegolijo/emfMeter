@@ -3,15 +3,22 @@
     <ion-menu #menu contentId="main-content" type="overlay" (ionWillOpen)="onOpenMenu()" (ionDidClose)="onCloseMenu()">
       <ion-header>
         <ion-toolbar>
-          <p style="text-align:center;">Configuración</p>
+          <p style="text-align:center;  font-weight: bolder;">Configuración</p>
         </ion-toolbar>
       </ion-header>
 
       <ion-content>
         <ion-item>
-          autorange
-          <ion-checkbox slot="end" [checked]="checkAutorange" (ionChange)="onChangeCkeks($event)">
+          auto-rango
+          <ion-checkbox slot="end" [checked]="checkAutorange" (ionChange)="onChangeCkeks($event, storage.AUTORANGE)">
           </ion-checkbox>
+        </ion-item>
+
+        <ion-item style="--inner-padding-start:0.5em" [disabled]="!checkAutorange">
+          <ion-label position="stacked" style="min-height: 1.5em;">tiempo de relajación {{rangeHoldTime/1000}}s.</ion-label>
+          <ion-range min="1000" max="10000" [value]="rangeHoldTime" step="1000"
+            (ionChange)="onChangeCkeks($event, storage.RANGE_HOLD_TIME)">
+          </ion-range>
         </ion-item>
       </ion-content>
 

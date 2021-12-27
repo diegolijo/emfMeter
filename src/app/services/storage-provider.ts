@@ -8,13 +8,15 @@ import { Subject } from 'rxjs';
 export class ProStorage {
 
 
-    public static AUTORANGE = 'AUTORANGE';
+    public readonly AUTORANGE = 'AUTORANGE';
+    public readonly RANGE_HOLD_TIME = 'RANGE_HOLD_TIME';
+    public readonly CALIBRATE_INFO = 'INFO_CALIBRATE';
+
     public storageObservable = new Subject<any>();
 
     constructor(
         public platform: Platform,
         private storage: Storage,
-
     ) { }
 
 
@@ -31,7 +33,7 @@ export class ProStorage {
     public setItem(key: string, value: any) {
         return new Promise((resolve, reject) => {
             this.storage.set(key, value).then(() => {
-                this.storageObservable.next({key, value});
+                this.storageObservable.next({ key, value });
                 resolve(null);
             }, (err: any) => {
                 reject(err);
