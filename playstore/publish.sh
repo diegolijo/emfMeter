@@ -12,5 +12,5 @@ cd ..
 cp platforms/android/app/build/outputs/bundle/release/app-release.aab playstore/.
 cd playstore
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore emf.keystore -storepass vayapedal  app-release.aab vayapedal
-C:\Users\jit\AppData\Local\Android\Sdk\build-tools\30.0.3\zipalign -v 4 app-release.aab emf.aab
+C:\Users\diego\AppData\Local\Android\Sdk\build-tools\30.0.3\zipalign -v 4 app-release.aab emf.aab
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppMinimize } from '@ionic-native/app-minimize/ngx/';
 import { Magnetometer, MagnetometerReading } from '@ionic-native/magnetometer/ngx';
 import { IonSegment, Platform } from '@ionic/angular';
@@ -16,6 +16,7 @@ export class HomePage implements OnInit {
   @ViewChild('segment', { static: true }) segment: IonSegment;
   public isAutorange: boolean;
 
+  public readonly MAX_HI = 4000;
   public readonly MAX = 1000;
   public readonly MID = 400;
   public readonly MIN = 100;
@@ -36,6 +37,7 @@ export class HomePage implements OnInit {
   private holdTime: number;
   private timeOut: any;
   private timeOut2: any;
+  private timeOut3: any;
 
 
   constructor(
@@ -90,6 +92,9 @@ export class HomePage implements OnInit {
       case '1000':
         this.scaleMeter = 'assets/img/1000uT.png';
         break;
+      case '4000':
+        this.scaleMeter = 'assets/img/4000uT.png';
+        break;
       default:
         break;
     }
@@ -115,7 +120,7 @@ export class HomePage implements OnInit {
 
     if (!this.platform.is('cordova')) {
       setInterval(() => {
-        this.updateData(Math.random() * 500, Math.random() * 1000, Math.random() * 1000, Math.random() * 1000);
+        this.updateData(Math.random() * 4000, Math.random() * 1000, Math.random() * 1000, Math.random() * 1000);
       }, 1000);
     }
   }
@@ -150,9 +155,18 @@ export class HomePage implements OnInit {
     if (magnitude > this.MID && Number.parseInt(this.segment.value, 10) >= this.MID) {
       this.segment.value = this.MAX.toString();
     }
+    if (magnitude > this.MAX && Number.parseInt(this.segment.value, 10) >= this.MAX) {
+      this.segment.value = this.MAX_HI.toString();
+    }
   }
 
   private restoreRange(magnitude: any) {
+    if (magnitude > this.MAX) {
+      clearTimeout(this.timeOut3);
+      this.timeOut3 = setTimeout(() => {
+        this.segment.value = this.MAX.toString();
+      }, this.holdTime);
+    }
     if (magnitude > this.MID) {
       clearTimeout(this.timeOut2);
       this.timeOut2 = setTimeout(() => {

@@ -20,6 +20,9 @@
       <ion-segment-button value="1000">
         <ion-label style="text-transform:none;">1000µT</ion-label>
       </ion-segment-button>
+      <ion-segment-button value="4000">
+        <ion-label style="text-transform:none;">4000µT</ion-label>
+      </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
@@ -36,11 +39,12 @@
 </div>
 
 
-<div class="digitalMeter">{{this.magnitude}}µT
+<div class="digitalMeter">
+  <div id="total">{{this.magnitude}}µT</div>
   <div class="meter-dimensions">
-    <div>x: {{this.x}} </div>
-    <div>y: {{this.y}}</div>
-    <div>z: {{this.z}}</div>
+    <div class="eje">x: {{this.x}} </div>
+    <div class="eje">y: {{this.y}}</div>
+    <div class="eje">z: {{this.z}}</div>
   </div>
 </div>
 

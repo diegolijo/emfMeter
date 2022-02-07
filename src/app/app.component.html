@@ -15,14 +15,12 @@
         </ion-item>
 
         <ion-item style="--inner-padding-start:0.5em" [disabled]="!checkAutorange">
-          <ion-label position="stacked" style="min-height: 1.5em;">tiempo de relajación {{rangeHoldTime/1000}}s.</ion-label>
+          <ion-label position="stacked" style="min-height: 1.5em;">tiempo de relajación {{rangeHoldTime/1000}}seg.</ion-label>
           <ion-range min="1000" max="10000" [value]="rangeHoldTime" step="1000"
             (ionChange)="onChangeCkeks($event, storage.RANGE_HOLD_TIME)">
           </ion-range>
         </ion-item>
       </ion-content>
-
-
 
 
       <ion-footer>
