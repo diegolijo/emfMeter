@@ -1,5 +1,5 @@
 {
-  "name": "medidorEm",
+  "name": "medidor-emf",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:debug": " cordova platform rm android && cordova plugins rm vosk-speech-to-text && npm install angular-speech-to-text@latest &&cordova plugins add vosk-speech-to-text && cordova platform add android@10.1.1 && ionic cordova run android "
   },
   "private": true,
   "dependencies": {
@@ -26,6 +27,7 @@
     "@ionic-native/splash-screen": "^5.36.0",
     "@ionic/angular": "^5.5.2",
     "@ionic/storage-angular": "^3.0.6",
+    "angular-speech-to-text": "0.0.12",
     "cordova-plugin-navigationbar-color": "^0.1.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
@@ -71,7 +73,8 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
-    "typescript": "~4.2.4"
+    "typescript": "~4.2.4",
+    "vosk-speech-to-text": "0.0.26"
   },
   "description": "An Ionic project",
   "cordova": {
@@ -87,7 +90,8 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-navigationbar-color": {},
-      "cordova-plugin-appminimize": {}
+      "cordova-plugin-appminimize": {},
+      "vosk-speech-to-text": {}
     },
     "platforms": [
       "android"

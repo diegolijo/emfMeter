@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppMinimize } from '@ionic-native/app-minimize/ngx/';
 import { Magnetometer, MagnetometerReading } from '@ionic-native/magnetometer/ngx';
-import { IonSegment, Platform } from '@ionic/angular';
+import { IonSegment, Platform, ToastController } from '@ionic/angular';
 import { ProStorage } from '../../services/storage-provider';
+import { SpeechToText } from 'angular-speech-to-text';
+
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -44,7 +48,9 @@ export class HomePage implements OnInit {
     private magnetometer: Magnetometer,
     private platform: Platform,
     private appMinimize: AppMinimize,
-    private storage: ProStorage
+    private storage: ProStorage,
+    private speechToText: SpeechToText,
+    private toastCtrl: ToastController
   ) {
     this.factor = innerWidth / this.WIDTH;
     this.deg = (this.scale * 25);
@@ -181,6 +187,61 @@ export class HomePage implements OnInit {
     }
   }
   /*************************************************************/
+
+
+
+  /************************* PRUEBAS ************************/
+  async onClickSpeech() {
+    try {
+      const res = await this.speechToText.enableSpeech();
+      if (res) {
+        console.log('%c ' + JSON.stringify(res), 'color:orange');
+        await this.speechToText.startSpeech();
+        this.subscribeToBarcode();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
+
+  async speechHandler(value: any) {
+    try {
+      if (value.parcial) {
+        console.log('%c ' + JSON.stringify(value.partial), 'color:orange');
+      }
+      if (value.texto) {
+        const toast = await this.toastCtrl.create({
+          message: value.texto,
+          duration: 2000
+        });
+        toast.present();
+        console.log('%c ' + JSON.stringify(value.text), 'color:green');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
+  private async subscribeToBarcode() {
+    this.speechToText.subscrbeToSpeech('home',
+      async (value) => {
+        this.speechHandler(value);
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
+
+  private async unsubscribeToBarcode() {
+    try {
+      this.speechToText.unsubscribeToSpeech('home');
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
 }
 

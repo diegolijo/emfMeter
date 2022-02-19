@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/componentsModule';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { ProStorage } from './services/storage-provider';
+import { SpeechToText } from 'angular-speech-to-text';
 
 
 
@@ -25,6 +26,7 @@ import { ProStorage } from './services/storage-provider';
     AppMinimize,
     ComponentsModule,
     ProStorage,
+    SpeechToText,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
