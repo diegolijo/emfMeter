@@ -186,25 +186,32 @@ export class HomePage implements OnInit {
       }, this.holdTime);
     }
   }
-  /*************************************************************/
+
+  /**********************************************************/
 
 
 
   /************************* PRUEBAS ************************/
+
   async onClickSpeech() {
     try {
+      const isEnable = await this.speechToText.isEnable();
       const res = await this.speechToText.enableSpeech();
-      if (res) {
-        console.log('%c ' + JSON.stringify(res), 'color:orange');
+      console.log('%c ' + JSON.stringify(res), 'color:orange');
+      const isPlaying = await this.speechToText.isPlaying();
+      if (res.result === 'on') {
         await this.speechToText.startSpeech();
+
         this.subscribeToBarcode();
       }
+      if (res.result === 'off') {
+        await this.speechToText.stopSpeech();
+      }
+
     } catch (err) {
       console.log(err);
     }
   }
-
-
 
   async speechHandler(value: any) {
     try {
@@ -224,7 +231,6 @@ export class HomePage implements OnInit {
     }
   }
 
-
   private async subscribeToBarcode() {
     this.speechToText.subscrbeToSpeech('home',
       async (value) => {
@@ -233,7 +239,6 @@ export class HomePage implements OnInit {
         console.log(err);
       });
   }
-
 
   private async unsubscribeToBarcode() {
     try {
