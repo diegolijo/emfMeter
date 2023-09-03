@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
 
   @ViewChild('menu', { static: true }) menu: IonMenu;
 
-  public version = '0.0.4';
+  public version = '0.0.5';
   public checkAutorange: boolean;
   public rangeHoldTime: number;
   private menuSubscrive: any;

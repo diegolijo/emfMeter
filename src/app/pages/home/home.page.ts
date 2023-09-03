@@ -5,7 +5,7 @@ import { AppMinimize } from '@ionic-native/app-minimize/ngx/';
 import { Magnetometer, MagnetometerReading } from '@ionic-native/magnetometer/ngx';
 import { IonSegment, Platform, ToastController } from '@ionic/angular';
 import { ProStorage } from '../../services/storage-provider';
-import { SpeechToText } from 'angular-speech-to-text';
+
 
 
 @Component({
@@ -48,9 +48,7 @@ export class HomePage implements OnInit {
     private magnetometer: Magnetometer,
     private platform: Platform,
     private appMinimize: AppMinimize,
-    private storage: ProStorage,
-    private speechToText: SpeechToText,
-    private toastCtrl: ToastController
+    private storage: ProStorage
   ) {
     this.factor = innerWidth / this.WIDTH;
     this.deg = (this.scale * 25);
@@ -190,63 +188,6 @@ export class HomePage implements OnInit {
   /**********************************************************/
 
 
-
-  /************************* PRUEBAS ************************/
-
-  async onClickSpeech() {
-    try {
-      const isEnable = await this.speechToText.isEnable();
-      const res = await this.speechToText.enableSpeech();
-      console.log('%c ' + JSON.stringify(res), 'color:orange');
-      const isPlaying = await this.speechToText.isPlaying();
-      if (res.result === 'on') {
-        await this.speechToText.startSpeech();
-
-        this.subscribeToBarcode();
-      }
-      if (res.result === 'off') {
-        await this.speechToText.stopSpeech();
-      }
-
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async speechHandler(value: any) {
-    try {
-      if (value.parcial) {
-        console.log('%c ' + JSON.stringify(value.partial), 'color:orange');
-      }
-      if (value.texto) {
-        const toast = await this.toastCtrl.create({
-          message: value.texto,
-          duration: 2000
-        });
-        toast.present();
-        console.log('%c ' + JSON.stringify(value.text), 'color:green');
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  private async subscribeToBarcode() {
-    this.speechToText.subscrbeToSpeech('home',
-      async (value) => {
-        this.speechHandler(value);
-      }, (err) => {
-        console.log(err);
-      });
-  }
-
-  private async unsubscribeToBarcode() {
-    try {
-      this.speechToText.unsubscribeToSpeech('home');
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
 }
 
