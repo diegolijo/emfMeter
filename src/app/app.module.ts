@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/componentsModule';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { ProStorage } from './services/storage-provider';
+import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 
 
 
@@ -26,6 +27,7 @@ import { ProStorage } from './services/storage-provider';
     AppMinimize,
     ComponentsModule,
     ProStorage,
+    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
