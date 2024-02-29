@@ -61,12 +61,14 @@
     "@angular/platform-browser": "~13.4.0",
     "@angular/platform-browser-dynamic": "~13.4.0",
     "@angular/router": "~13.4.0",
+    "@awesome-cordova-plugins/core": "^6.6.0",
+    "@awesome-cordova-plugins/splash-screen": "^6.6.0",
     "@ionic-native/app-minimize": "^5.36.0",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/magnetometer": "^5.36.0",
     "@ionic-native/native-audio": "^5.36.0",
     "@ionic-native/splash-screen": "^5.36.0",
-    "@ionic/angular": "^5.5.2",
+    "@ionic/angular": "^6.7.5",
     "@ionic/storage-angular": "^3.0.6",
     "cordova-plugin-navigationbar-color": "^0.1.0",
     "rxjs": "~6.6.0",
@@ -96,8 +98,6 @@
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^4.2.1",
     "cordova-plugin-magnetometer": "^1.0.0",
-    "cordova-plugin-nativeaudio": "^3.0.9",
-    "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
@@ -119,10 +119,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-magnetometer": {},
-      "cordova-plugin-nativeaudio": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
