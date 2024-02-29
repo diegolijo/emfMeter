@@ -14,22 +14,21 @@ import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    IonicStorageModule.forRoot(),
-    AppRoutingModule
-  ],
-  providers: [
-    Magnetometer,
-    AppMinimize,
-    ComponentsModule,
-    ProStorage,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-  ],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        IonicStorageModule.forRoot(),
+        AppRoutingModule
+    ],
+    providers: [
+        Magnetometer,
+        AppMinimize,
+        ComponentsModule,
+        ProStorage,
+        SplashScreen,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
