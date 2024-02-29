@@ -33,6 +33,10 @@ export class HomePage implements OnInit {
   public x = '0';
   public y = '0';
   public z = '0';
+  public maxMagnitude = '0';
+  public maxx = '0';
+  public maxy = '0';
+  public maxz = '0';
   public scaleMeter = 'assets/img/100uT.png';
 
   // public segmentValue = this.MIN;
@@ -117,14 +121,10 @@ export class HomePage implements OnInit {
           this.initMagnetometer();
         }
       });
-
-
-
     }
-
     if (!this.platform.is('cordova')) {
       setInterval(() => {
-        this.updateData(Math.random() * 4000, Math.random() * 1000, Math.random() * 1000, Math.random() * 1000);
+        //  this.updateData(Math.random() * 4000, Math.random() * 1000, Math.random() * 1000, Math.random() * 1000);
       }, 1000);
     }
   }
@@ -140,6 +140,10 @@ export class HomePage implements OnInit {
     this.x = x.toFixed(1);
     this.y = y.toFixed(1);
     this.z = z.toFixed(1);
+    x > this.x && (this.maxx = x);
+    x > this.y && (this.maxx = y);
+    x > this.z && (this.maxx = z);
+    magnitude > this.maxMagnitude && (this.maxMagnitude = z);
     this.deg = (this.scale * magnitude);
     this.deg = this.deg > HomePage.maxDeg + 2 ? HomePage.maxDeg + 2 : this.deg;
   }
