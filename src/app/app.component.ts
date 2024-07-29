@@ -3,17 +3,19 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 import { IonMenu, Platform } from '@ionic/angular';
 import { ProStorage } from './services/storage-provider';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit {  
 
-  @ViewChild('menu', { static: true }) menu: IonMenu;
+  @ViewChild('menu', { static: true }) menu: IonMenu;  
 
-  public version = '0.0.5';
+  public APP_VERSION = environment.appVersion;
+
   public checkAutorange: boolean;
   public rangeHoldTime: number;
   private menuSubscrive: any;

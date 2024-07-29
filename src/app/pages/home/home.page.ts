@@ -3,10 +3,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppMinimize } from '@ionic-native/app-minimize/ngx/';
 import { Magnetometer, MagnetometerReading } from '@ionic-native/magnetometer/ngx';
-import { IonSegment, Platform, ToastController } from '@ionic/angular';
+import { IonSegment, Platform } from '@ionic/angular';
 import { ProStorage } from '../../services/storage-provider';
-
-
 
 @Component({
   selector: 'app-home',
