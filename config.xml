@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.vayapedal.emf" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.vayapedal.emf" version="0.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>EMF meter</name>
     <description>Medidor de campo electromagnético</description>
     <author email="diegolijo@gmail.com" href="https://vayapedal.com/">Parrino</author>
@@ -22,8 +22,9 @@
     <preference name="orientation" value="portrait" />
     <preference name="AndroidXEnabled" value="true" />
     <preference name="NavigationBarBackgroundColor" value="#000000" />
-    <preference name="android-minSdkVersion" value="23" />
-    <preference name="android-targetSdkVersion" value="34" />
+    <preference name="android-minSdkVersion" value="25" />
+    <preference name="android-targetSdkVersion" value="35" />
+    <hook src="scripts/update-themes.js" type="after_platform_add" />
     <platform name="android">
         <preference name="AndroidXEnabled" value="true" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity[@android:name='MainActivity']" xmlns:android="http://schemas.android.com/apk/res/android">

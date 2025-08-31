@@ -32,4 +32,5 @@ npm-debug.log*
 /www
 package-lock.json
 playstore/bundletool-all-1.14.0.jar
+playstore/emf.apk
 .angular
